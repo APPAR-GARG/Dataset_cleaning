@@ -59,7 +59,21 @@ WHERE f.date = sub.date
 AND f.units_sold IS NULL;
 
 
+--removing duplicate values:
+SELECT segment, country, product, date, COUNT(*)
+FROM financial_sample
+GROUP BY segment, country, product, date
+HAVING COUNT(*) > 1;
 
+
+--delete duplicate keeping one recored:
+
+DELETE FROM financial_sample
+WHERE ctid NOT IN (
+    SELECT MIN(ctid)
+    FROM financial_sample
+    GROUP BY segment, country, product, date
+);
 
 
 
